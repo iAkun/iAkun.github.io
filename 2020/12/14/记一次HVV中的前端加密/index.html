@@ -35,10 +35,10 @@
 <p><strong>安全A</strong>：字数不够，明文来凑！</p>
 </blockquote>
 <p><img src="https://i.loli.net/2020/12/14/tzSZ15GOIiw6uDN.png" alt="ph.png"></p>
-<h2 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h2><p>越来越多的网站为了防止数据被非法篡改，采用了一些特殊的加密方式来处理。<strong>登陆处居多~</strong></p>
+<h2 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h2><p>目前，越来越多的网站对数据的传输采用了一些特殊的加密方式来处理。<strong>登陆处居多~</strong></p>
 <p>由于目标比较敏感，故采用我司某处业务的登陆界面以假乱真吧。😳</p>
 <p><img src="https://i.loli.net/2020/12/14/ks2gRAPWU8FjxtY.png" alt="dljk.png"></p>
-<p>目标没有采用验证码、用户名可枚举、没有登陆错误次数限制，可进行愉快的爆破。</p>
+<p>目标没有验证码、没有登陆错误次数限制、用户名可枚举，可进行愉快的爆破。</p>
 <p><img src="https://i.loli.net/2020/12/14/q7MNOpzjeZdyLI3.png" alt="jm.png"></p>
 <p>输入用户名密码1/1，抓包发现是前端加密。开始分析，定位到登陆login()事件处，看到加密函数为strEnc。</p>
 <p><img src="https://i.loli.net/2020/12/14/ekdZaGI6bMFfC7x.png" alt="fxjm.png"></p>
@@ -47,11 +47,11 @@
 <p>确认过眼神，是DES加密。</p>
 <p>将js文件下载下来，然后在html中调用测试下。</p>
 <p><img src="https://i.loli.net/2020/12/14/zCdb4XBs952Ytqj.png" alt="html.png"></p>
-<p>输出没问题</p>
+<p>输出没问题。</p>
 <p><img src="https://i.loli.net/2020/12/14/176AedEQpLSvscN.png" alt="sc.png"></p>
 <p>到这就可以拿出自己的用户名和密码字典，分别循环将加密后的结果输出保存，然后贴到burp的中正常食用即可~</p>
 <p>但这在效率上来说有点慢了，对于我这种懒人你让我做这种高难度的操作是不可能的，绝不可能。</p>
-<p>我追去的是“这点点那点点”就可以完成整个工作过程，这样不香么。</p>
+<p>我追求的是“这点点那点点”就可以完成整个工作过程，这样不香么。</p>
 <p><img src="https://i.loli.net/2020/12/14/37I6yOZSztXVaom.jpg" alt="timg.jpg"></p>
 <p>这里推荐一个Burp插件:<a href="https://github.com/whwlsfb/BurpCrypto" target="_blank" rel="noopener">BurpCrypto</a></p>
 <blockquote>
@@ -70,14 +70,15 @@
 <p><img src="https://i.loli.net/2020/12/14/WhLZ3M9oBAbXdVR.png" alt="yhmjm.png"></p>
 <p>Payload Processing选择刚添加的yhm</p>
 <p><img src="https://i.loli.net/2020/12/14/uIqDJVcXhKpLMU2.png" alt="bpcs.png"></p>
-<p>到这就可以完美的枚举用户名了</p>
+<p>枚举用户名</p>
 <p><img src="https://i.loli.net/2020/12/14/KS8QM17FX6fhNoc.png" alt="meiju.png"></p>
 <p><img src="https://i.loli.net/2020/12/14/oJrtuxp9PCjGaIF.png" alt="textplan.png"></p>
-<p>确定了用户名之后，就可以爆破密码了。</p>
-<p>密码加密比用户名加密多了一个loginname参数，对照填写。</p>
+<p>用枚举出的用户名去爆破密码，密码加密比用户名加密多了一个loginname参数，对照填写。</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> lpEnc = [<span class="string">'12341234abcdabcd!@#$!@#$'</span>,<span class="string">'admin'</span>];</span><br><span class="line">strEnc(password,loginname,lpEnc[<span class="number">0</span>],lpEnc[<span class="number">1</span>])</span><br></pre></td></tr></table></figure>
 
 <p><img src="https://i.loli.net/2020/12/14/BDWnSMGzKLyvdNR.png" alt="mmjm.png"></p>
+<p>整个过程还是很顺利的，没有遇到JS混淆，JS代码难以阅读等情况，对我这种菜逼极其友好。</p>
+<p>但对其他加密方式还需学习研究。毕竟马克思说过实践出真知嘛！😊</p>
 <p>OK，一篇文章也水的差不多了，泡杯茶准备下班。</p>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://blog.wanghw.cn/security/burpcrypto-tutorial.html" target="_blank" rel="noopener">https://blog.wanghw.cn/security/burpcrypto-tutorial.html</a></p>
 
